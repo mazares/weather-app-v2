@@ -1,7 +1,5 @@
 `use strict`;
 
-console.log(`works`);
-
 const url = `https://www.weatherapi.com`;
 
 const apiKey1 = `8630ff89e58549dba2d82630230707`;
@@ -9,6 +7,10 @@ const apiKey1 = `8630ff89e58549dba2d82630230707`;
 const apiKey2 = `4defc69e3ae54e89bbc141914231007`;
 
 const apiKey3 = `2238cc77c0c648d79d0142038231007`;
+
+const apiKey4 = `baae20989ca545fa9e0122825231107`;
+
+const elderWood = `https://api.weatherapi.com/v1/current.json?key=baae20989ca545fa9e0122825231107&q=Bucuresti&aqi=yes`;
 
 const appEl = document.querySelector(`.app`);
 
@@ -29,6 +31,10 @@ const logInForm = document.querySelector(`.login-form`);
 const logInEl = document.querySelector(`.login`);
 
 const signInEl = document.querySelector(`.signin`);
+
+const currentLocation = document.querySelector(`.current-location`);
+
+const tempC = document.querySelector(`.temp-c`);
 
 toggleTheme.addEventListener(`click`, () => {
     appEl.classList.toggle(`dark`);
@@ -144,21 +150,67 @@ setInterval(() => {
     clockDisplay();
 }, 1000);
 
-const latitude = navigator.geolocation.getCurrentPosition(
+const lat = navigator.geolocation.getCurrentPosition(
     (position) => position.coords.latitude
 );
 
-const longitude = navigator.geolocation.getCurrentPosition(
+const long = navigator.geolocation.getCurrentPosition(
     (position) => position.coords.longitude
 );
 
 const getWeather = async(lat, long) => {
     const data = await fetch(
-        `${url}/v1/forecast.json?key=${apiKey1}&q=${lat},${long}&days=3`
+        `https://api.weatherapi.com/v1/current.json?key=baae20989ca545fa9e0122825231107&q=Bucuresti&aqi=yes`
     );
+    try {
+        const response = await data.json();
 
-    const weather = await data.json();
-    console.log(weather);
+        tempC.textContent = `${response.current.temp_c}°C`;
+
+        console.log(response.location.name);
+    } catch (error) {
+        console.log(error);
+        const reject = await data.reject();
+    }
 };
 
-console.log(getWeather(latitude, longitude));
+// "current": {
+// "last_updated_epoch": 1689078600,
+// "last_updated": "2023-07-11 15:30",
+// "temp_c": 32.0,
+// "temp_f": 89.6,
+// "is_day": 1,
+// "condition": {
+//     "text": "Sunny",
+//     "icon": "//cdn.weatherapi.com/weather/64x64/day/113.png",
+//     "code": 1000
+// },
+// "wind_mph": 2.2,
+// "wind_kph": 3.6,
+// "wind_degree": 282,
+// "wind_dir": "WNW",
+// "pressure_mb": 1014.0,
+// "pressure_in": 29.94,
+// "precip_mm": 0.0,
+// "precip_in": 0.0,
+// "humidity": 38,
+// "cloud": 0,
+// "feelslike_c": 30.8,
+// "feelslike_f": 87.4,
+// "vis_km": 10.0,
+// "vis_miles": 6.0,
+// "uv": 8.0,
+// "gust_mph": 10.1,
+// "gust_kph": 16.2,
+// "air_quality": {
+//     "co": 200.3000030517578,
+//     "no2": 0.699999988079071,
+//     "o3": 123.0,
+//     "so2": 1.100000023841858,
+//     "pm2_5": 11.5,
+//     "pm10": 12.199999809265137,
+//     "us-epa-index": 1,
+//     "gb-defra-index": 1
+// }
+// }
+// }
